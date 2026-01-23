@@ -81,7 +81,7 @@ const About = () => {
               <div className="relative glass-effect p-4 rounded-3xl border border-white/30 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
                 <div className="relative overflow-hidden rounded-2xl">
                   <img
-                    src="/profile-photo.jpg"
+                    src="/profile-photo.JPG"
                     alt="Himanshu Ladha"
                     className="w-full h-auto rounded-2xl object-cover shadow-xl"
                     onError={(e) => {
