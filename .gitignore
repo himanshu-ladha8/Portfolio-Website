@@ -1,12 +1,18 @@
 # Node
 node_modules
-frontend/node_modules
-backend/node_modules
+Frontend/node_modules
+Backend/node_modules
+Frontend/app1/node_modules
 
 # Environment
 .env
-frontend/.env
-backend/.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+Frontend/app1/.env
+Backend/.env
 
 # Build
-frontend/build
+Frontend/app1/build
+Frontend/app1/dist
