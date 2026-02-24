@@ -22,12 +22,13 @@ const Contact = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      // Use production backend when frontend is on Render (env may be missing at build time)
-      const isProduction =
-        typeof window !== 'undefined' && window.location.hostname.includes('onrender.com');
+      // Default to production backend; use localhost only when running on localhost
+      const isLocalhost =
+        typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
       const apiUrl =
         process.env.REACT_APP_API_URL ||
-        (isProduction ? 'https://portfolio-backend-sn0w.onrender.com' : 'http://localhost:5000');
+        (isLocalhost ? 'http://localhost:5000' : 'https://portfolio-backend-sn0w.onrender.com');
       const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         headers: {
