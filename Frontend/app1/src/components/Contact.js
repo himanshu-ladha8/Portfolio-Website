@@ -22,7 +22,11 @@ const Contact = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      // Use production backend when frontend is on production origin (fallback if env not set in build)
+      const isProduction = window.location.origin === 'https://portfolio-frontend-za4s.onrender.com';
+      const apiUrl =
+        process.env.REACT_APP_API_URL ||
+        (isProduction ? 'https://portfolio-backend-sn0w.onrender.com' : 'http://localhost:5000');
       const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         headers: {
