@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const Projects = () => {
-  const [hoveredProject, setHoveredProject] = useState(null);
 
   const projects = [
     {
@@ -10,7 +9,7 @@ const Projects = () => {
       description:
         'A modern, responsive personal portfolio website built with MERN stack and Tailwind CSS. Features include animated backgrounds, custom cursor, glassmorphism effects, and a contact form with backend integration.',
       technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'Tailwind CSS'],
-      image: 'https://via.placeholder.com/600x400/4F46E5/FFFFFF?text=Portfolio',
+      image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="600" height="400"%3E%3Crect fill="%234F46E5" width="600" height="400"/%3E%3Ctext fill="%23fff" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="24" font-family="sans-serif"%3EPortfolio%3C/text%3E%3C/svg%3E',
       github: '#',
       live: '#',
       gradient: 'from-blue-500 to-cyan-500',
@@ -22,7 +21,7 @@ const Projects = () => {
       description:
         'A comprehensive restaurant management system for handling orders, inventory, staff management, and customer relations. Coming soon with advanced features and modern UI.',
       technologies: ['React', 'Node.js', 'MongoDB', '.NET', 'Figma'],
-      image: 'https://via.placeholder.com/600x400/7C3AED/FFFFFF?text=RestoFlow',
+      image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="600" height="400"%3E%3Crect fill="%237C3AED" width="600" height="400"/%3E%3Ctext fill="%23fff" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="24" font-family="sans-serif"%3ERestoFlow%3C/text%3E%3C/svg%3E',
       github: '#',
       live: '#',
       gradient: 'from-purple-500 to-cyan-500',
@@ -59,8 +58,6 @@ const Projects = () => {
             <div
               key={project.id}
               className="group relative"
-              onMouseEnter={() => setHoveredProject(project.id)}
-              onMouseLeave={() => setHoveredProject(null)}
             >
               {/* Gradient Border Effect */}
               <div

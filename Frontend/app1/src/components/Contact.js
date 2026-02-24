@@ -22,8 +22,9 @@ const Contact = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      // Use production backend when frontend is on production origin (fallback if env not set in build)
-      const isProduction = window.location.origin === 'https://portfolio-frontend-za4s.onrender.com';
+      // Use production backend when frontend is on Render (env may be missing at build time)
+      const isProduction =
+        typeof window !== 'undefined' && window.location.hostname.includes('onrender.com');
       const apiUrl =
         process.env.REACT_APP_API_URL ||
         (isProduction ? 'https://portfolio-backend-sn0w.onrender.com' : 'http://localhost:5000');
