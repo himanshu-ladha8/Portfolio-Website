@@ -7,15 +7,27 @@ dotenv.config();
 
 const app = express();
 
-// Middleware - allow frontend origin(s): localhost for dev, FRONTEND_URL for production
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+// CORS - allow frontend origin so browser requests from deployed/local frontend succeed
+const FRONTEND_URL = process.env.FRONTEND_URL;
 const allowedOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
   'https://portfolio-frontend-za4s.onrender.com',
 ];
 if (FRONTEND_URL && !allowedOrigins.includes(FRONTEND_URL)) allowedOrigins.push(FRONTEND_URL);
-app.use(cors({ origin: allowedOrigins }));
+const corsOpts = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. Postman, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 204,
+  credentials: false,
+};
+app.use(cors(corsOpts));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -67,8 +79,13 @@ app.post('/api/contact', async (req, res) => {
       message: 'Thank you for your message! I will get back to you soon.' 
     });
   } catch (error) {
-    console.error('Error saving contact:', error);
-    res.status(500).json({ error: 'Failed to send message. Please try again.' });
+    console.error('Error saving contact:', error.message || error);
+    if (error.name) console.error('Error name:', error.name);
+    if (error.code) console.error('Error code:', error.code);
+    res.status(500).json({
+      error: 'Failed to send message. Please try again.',
+      ...(process.env.NODE_ENV !== 'production' && { detail: error.message }),
+    });
   }
 });
 
