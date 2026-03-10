@@ -22,9 +22,7 @@ const Contact = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      // Use REACT_APP_API_URL if set; otherwise production backend (so local frontend works without local backend)
-      const apiUrl =
-        process.env.REACT_APP_API_URL || 'https://portfolio-backend-sn0w.onrender.com';
+      const apiUrl = 'https://portfolio-backend-sn0w.onrender.com';
       const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         headers: {
