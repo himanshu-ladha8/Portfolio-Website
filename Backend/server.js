@@ -40,8 +40,12 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
+// Connect to MongoDB before accepting requests (avoids 500 on cold start / first request)
 mongoose.connect(MONGODB_URI)
-  .then(() => console.log('MongoDB connected successfully'))
+  .then(() => {
+    console.log('MongoDB connected successfully');
+    startServer();
+  })
   .catch(err => {
     console.error('MongoDB connection error:', err);
     process.exit(1);
@@ -69,6 +73,11 @@ app.post('/api/contact', async (req, res) => {
 
     if (!name || !email || !message) {
       return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // If DB disconnected (e.g. after idle), reconnect once before save
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(MONGODB_URI);
     }
 
     const contact = new Contact({ name, email, message });
@@ -100,8 +109,10 @@ app.get('/api/messages', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+function startServer() {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
 
