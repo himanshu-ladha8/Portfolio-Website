@@ -9,7 +9,11 @@ const app = express();
 
 // Middleware - allow frontend origin(s): localhost for dev, FRONTEND_URL for production
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
-const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'https://portfolio-frontend-za4s.onrender.com',
+];
 if (FRONTEND_URL && !allowedOrigins.includes(FRONTEND_URL)) allowedOrigins.push(FRONTEND_URL);
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
