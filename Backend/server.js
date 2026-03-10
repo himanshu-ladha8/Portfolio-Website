@@ -7,20 +7,29 @@ dotenv.config();
 
 const app = express();
 
-// Middleware - allow frontend origin for deploy (set FRONTEND_URL in production)
+// Middleware - allow frontend origin(s): localhost for dev, FRONTEND_URL for production
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
-app.use(cors({ origin: FRONTEND_URL }));
+const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
+if (FRONTEND_URL && !allowedOrigins.includes(FRONTEND_URL)) allowedOrigins.push(FRONTEND_URL);
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio';
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('MongoDB connected successfully'))
-.catch(err => console.error('MongoDB connection error:', err));
+// MongoDB connection (required in production)
+const isProduction = process.env.NODE_ENV === 'production';
+const MONGODB_URI = process.env.MONGODB_URI || (isProduction ? null : 'mongodb://localhost:27017/portfolio');
+
+if (!MONGODB_URI) {
+  console.error('FATAL: MONGODB_URI is not set. Set it in .env or your production environment.');
+  process.exit(1);
+}
+
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
 
 // Contact Message Schema
 const contactSchema = new mongoose.Schema({
